@@ -21,17 +21,46 @@ export default function Report() {
     if (!reportRef.current) return;
     try {
       toast({ title: "Generating PDF...", description: "Please wait while we prepare your report." });
-      const canvas = await html2canvas(reportRef.current, { scale: 2, useCORS: true });
-      const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF("p", "mm", "a4");
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
       
-      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+      const element = reportRef.current;
+      const canvas = await html2canvas(element, { 
+        scale: 2, 
+        useCORS: true,
+        logging: false,
+        backgroundColor: "#ffffff"
+      });
+      
+      const imgData = canvas.toDataURL("image/jpeg", 0.95);
+      const pdf = new jsPDF({
+        orientation: "p",
+        unit: "mm",
+        format: "a4"
+      });
+      
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = pdf.internal.pageSize.getHeight();
+      const imgWidth = canvas.width;
+      const imgHeight = canvas.height;
+      const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+      
+      const finalWidth = imgWidth * ratio;
+      const finalHeight = imgHeight * ratio;
+      
+      pdf.addImage(imgData, "JPEG", 0, 0, finalWidth, finalHeight);
       pdf.save(`ClaimAgent_Report_${claim.id}.pdf`);
       toast({ title: "Success", description: "PDF downloaded successfully." });
     } catch (error) {
-      toast({ title: "Error", description: "Failed to generate PDF.", variant: "destructive" });
+      console.error("PDF Error:", error);
+      toast({ title: "Error", description: "Failed to generate PDF. Downloading JSON as fallback.", variant: "destructive" });
+      
+      // Fallback: Download JSON
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(claim, null, 2));
+      const downloadAnchorNode = document.createElement('a');
+      downloadAnchorNode.setAttribute("href", dataStr);
+      downloadAnchorNode.setAttribute("download", `ClaimAgent_Report_${claim.id}.json`);
+      document.body.appendChild(downloadAnchorNode);
+      downloadAnchorNode.click();
+      downloadAnchorNode.remove();
     }
   };
 

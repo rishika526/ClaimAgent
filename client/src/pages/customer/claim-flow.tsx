@@ -30,6 +30,14 @@ export default function ClaimFlow() {
   const [images, setImages] = useState<string[]>([]);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
 
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files) {
+      const newImages = Array.from(files).map(file => URL.createObjectURL(file));
+      setImages(prev => [...prev, ...newImages].slice(0, 6));
+    }
+  };
+
   const handleLoadDemo = () => {
     setBrand("Toyota");
     setModel("Corolla Altis");
@@ -39,11 +47,11 @@ export default function ClaimFlow() {
     setPolicyType("Comprehensive");
     setPolicyNumber("POL-12345-67");
     
-    // Create mock images (using placeholder object URLs in a real app)
+    // Damaged car images
     setImages([
-      "https://images.unsplash.com/photo-1605557202138-097825c6dfdc?w=400&h=300&fit=crop",
-      "https://images.unsplash.com/photo-1542282088-fe8426682b8f?w=400&h=300&fit=crop",
-      "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=400&h=300&fit=crop"
+      "https://images.unsplash.com/photo-1597328290883-50c5787b7c7e?w=800&q=80", // Smashed front
+      "https://images.unsplash.com/photo-1621932953986-15fcf084da0f?w=800&q=80", // Dent side
+      "https://images.unsplash.com/photo-1599256621730-535171e28e50?w=800&q=80"  // Cracked bumper
     ]);
   };
 
@@ -209,7 +217,18 @@ export default function ClaimFlow() {
             <CardContent className="px-8 py-8 space-y-8 bg-white min-h-[400px] flex flex-col justify-center">
               {!isAnalyzing ? (
                 <>
-                  <div className="border-2 border-dashed border-slate-300 rounded-2xl p-16 text-center hover:bg-slate-50 transition-all duration-300 cursor-pointer group" onClick={handleLoadDemo}>
+                  <div 
+                    className="border-2 border-dashed border-slate-300 rounded-2xl p-16 text-center hover:bg-slate-50 transition-all duration-300 cursor-pointer group relative"
+                    onClick={() => document.getElementById('file-upload')?.click()}
+                  >
+                    <input 
+                      type="file" 
+                      id="file-upload" 
+                      className="hidden" 
+                      multiple 
+                      accept="image/*" 
+                      onChange={handleFileUpload}
+                    />
                     <UploadCloud className="w-16 h-16 text-slate-300 mx-auto mb-6 group-hover:text-primary transition-colors" />
                     <h3 className="text-xl font-semibold text-slate-700 mb-2">Click or drag images to upload</h3>
                     <p className="text-slate-500 mb-6">JPG, JPEG, PNG (Max 6 images)</p>
