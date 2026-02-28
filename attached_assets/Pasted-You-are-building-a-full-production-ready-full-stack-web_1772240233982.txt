@@ -1,0 +1,347 @@
+You are building a full production-ready full-stack web application named:
+
+ClaimAgent
+
+⚠️ Build everything from scratch.
+⚠️ Do not create just frontend mockups.
+⚠️ Build fully functional backend + database + PDF system.
+
+🔵 PROJECT OVERVIEW
+
+Build an AI-powered motor insurance claim processing system that:
+
+• Accepts vehicle details
+• Accepts up to 6 damage images
+• Runs computer vision damage detection
+• Calculates repair cost
+• Applies deductible logic
+• Estimates repair duration
+• Detects potential fraud
+• Generates instant decision (Pre-approved / Manual Review)
+• Generates downloadable PDF report
+• Includes separate insurer dashboard
+
+🔵 TECH STACK (MANDATORY)
+
+Frontend:
+React + TypeScript + TailwindCSS
+
+Backend:
+Node.js + Express
+
+Database:
+MongoDB (Mongoose)
+
+PDF Generation:
+PDFKit
+
+Authentication:
+JWT-based role authentication
+
+🔵 APPLICATION STRUCTURE
+
+Frontend:
+
+/customer
+
+/insurer
+
+Shared components
+
+Backend:
+
+/api/auth
+
+/api/claims
+
+/api/analyze
+
+/api/pdf
+
+Database Collections:
+Users
+Claims
+
+🔵 ROLE-BASED SYSTEM
+
+Two roles:
+
+👤 Customer
+
+Register / Login
+
+Submit claim
+
+Upload images
+
+View claim status
+
+Download PDF
+
+🏢 Insurer
+
+Login credentials for demo:
+Email: insurer@claimagent.com
+
+Password: admin123
+
+Insurer can:
+
+View all claims
+
+Filter claims:
+
+Pre-approved
+
+High value (> ₹50,000)
+
+Low AI confidence (< 85%)
+
+Fraud flagged
+
+Override decision
+
+Add remarks
+
+Change claim status to Finalized
+
+🔵 CUSTOMER CLAIM FLOW
+Step 1 – Vehicle Information
+
+Dropdown fields:
+
+Brand:
+Toyota, Hyundai, Tata, Honda, Maruti Suzuki, BMW, Audi, Mercedes, Mahindra, Kia, Other
+
+Model (dynamic per brand)
+
+Variant (dynamic)
+
+Year (2010–2025)
+
+Engine:
+Petrol, Diesel, CNG, Electric, Hybrid
+
+Policy Type:
+Comprehensive
+Third Party
+
+Policy Number (text input)
+
+If "Other" selected anywhere → show manual input field.
+
+Step 2 – Upload Images
+
+Allow upload of up to 6 images.
+
+Accept:
+JPG, JPEG, PNG
+
+Add button:
+"Load Demo Set"
+
+Demo Set Vehicle:
+Toyota Corolla Altis
+Variant: VX CVT
+Year: 2022
+Engine: Petrol
+Policy: Comprehensive
+
+Demo Images (same car, different angles):
+
+Front bumper dent
+
+Left door scratch
+
+Cracked headlight
+
+🔵 DAMAGE ANALYSIS ENGINE
+
+Simulate computer vision processing:
+
+• Convert to grayscale
+• Edge detection
+• Heatmap overlay
+• Bounding box marking
+
+For each image detect:
+
+Part
+
+Damage Type
+
+Severity
+
+Confidence %
+
+Example detections:
+Front Bumper – Dent – Severe – 92%
+Door – Scratch – Medium – 85%
+Headlight – Broken – Severe – 96%
+
+🔵 COST ESTIMATION ENGINE
+
+Base logic:
+
+Parts Cost = based on detected parts
+Paint Cost = based on affected panels
+Labor = 30% of parts cost
+
+🔵 DEDUCTIBLE LOGIC
+
+If Comprehensive:
+Deductible = ₹1000 OR 5% of total (whichever higher)
+
+If Third Party:
+Insurance pays ₹0
+
+Calculate:
+
+Total Estimate
+– Deductible
+= Insurance Payable
+
+Customer Payable = Deductible
+
+🔵 AI APPROVAL LOGIC
+
+If:
+AI Confidence > 90%
+AND Total Estimate < ₹50,000
+AND Fraud Risk Low
+→ Pre-Approved
+
+Else:
+Manual Review Required
+
+🔵 REPAIR TIME ESTIMATION
+
+Minor → 1–2 days
+Moderate → 2–4 days
+Severe → 4–7 days
+
+Display clearly in report.
+
+🔵 FRAUD DETECTION LITE
+
+Implement:
+
+• Image hash check
+• Duplicate upload detection
+• Same image used in previous claim
+• EXIF timestamp mismatch
+
+If detected:
+Flag:
+⚠ Potential Duplicate Claim
+
+Add:
+AI Risk Score:
+Low
+Medium
+High
+
+Store in database.
+
+🔵 CLAIM STATUS LIFECYCLE
+
+Submitted
+AI Processed
+Pre-Approved
+Under Manual Review
+Finalized
+
+Persist in MongoDB.
+
+🔵 FINAL REPORT PAGE
+
+Display:
+
+Claim ID (UUID)
+Date
+Vehicle Details
+Policy Number
+Detected Damages Table
+Severity
+AI Confidence
+Estimated Repair Duration
+Parts Cost
+Paint Cost
+Labor Cost
+Deductible
+Insurance Payable
+Customer Payable
+AI Risk Score
+Final Decision Badge
+
+Buttons:
+Download PDF
+Start New Claim
+
+🔵 PDF GENERATION (MUST WORK)
+
+Use PDFKit.
+
+Generate properly formatted PDF including:
+
+• Claim header
+• All claim details
+• Damage table
+• Cost breakdown
+• Risk score
+• Decision
+• Embedded image thumbnails
+
+Auto-download when button clicked.
+
+Filename format:
+ClaimAgent_Report_<ClaimID>.pdf
+
+🔵 UI DESIGN REQUIREMENTS
+
+Professional insurance SaaS theme.
+
+Colors:
+Blue + White
+
+Fonts:
+Outfit (Headings)
+Inter (Body)
+
+Add:
+• Smooth transitions
+• Loading spinner during AI analysis
+• Clean dashboard layout
+• Claim cards for insurer view
+• Responsive layout
+
+🔵 SECURITY
+
+Use:
+JWT authentication
+Protected routes
+Role-based middleware
+
+🔵 SEED DATABASE
+
+Auto-create insurer user on first run:
+Email: insurer@claimagent.com
+
+Password: admin123
+Role: insurer
+
+🔵 FINAL OUTPUT
+
+Build a fully working:
+
+Full-stack
+Database-connected
+Role-based
+PDF-generating
+AI-simulated
+Insurance claim processing web application
+
+Project name everywhere:
+ClaimAgent
+
+END OF INSTRUCTIONS.
